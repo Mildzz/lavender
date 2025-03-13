@@ -119,6 +119,19 @@ public class BookContentLoader implements SynchronousResourceReloader, Identifia
                     requiredAdvancements.add(advancementId);
                 }
 
+                var requiredBiomes = new ImmutableSet.Builder<Identifier>();
+                for (var biomeElement : JsonHelper.getArray(markdown.meta, "required_biomes", new JsonArray())) {
+                    if (!biomeElement.isJsonPrimitive()) continue;
+
+                    var biomeId = Identifier.tryParse(biomeElement.getAsString());
+                    if (biomeId == null) {
+                        Lavender.LOGGER.warn("Did not add biome '{}' as requirement to entry '{}' as it is not a valid biome identifier", biomeElement.getAsString(), identifier);
+                        continue;
+                    }
+
+                    requiredBiomes.add(biomeId);
+                }
+
                 var additionalSearchTerms = new ImmutableSet.Builder<String>();
                 for (var termElement : JsonHelper.getArray(markdown.meta, "additional_search_terms", new JsonArray())) {
                     if (!termElement.isJsonPrimitive()) continue;
@@ -137,6 +150,7 @@ public class BookContentLoader implements SynchronousResourceReloader, Identifia
                         ordinal,
                         requiredAdvancements.build(),
                         associatedItems.build(),
+                        requiredBiomes.build(),
                         additionalSearchTerms.build(),
                         markdown.content
                 );

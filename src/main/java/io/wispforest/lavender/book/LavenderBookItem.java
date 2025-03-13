@@ -60,7 +60,7 @@ public class LavenderBookItem extends Item {
     }
 
     /**
-     * Shorthand of {@link #registerForBook(Identifier, Identifier, net.minecraft.item.Item.Settings)} which
+     * Shorthand of {@link #registerForBook(Identifier, Identifier, Settings)} which
      * uses {@code bookId} as the item id
      */
     public static LavenderBookItem registerForBook(@NotNull Identifier bookId, Settings settings) {
